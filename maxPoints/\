@@ -1,0 +1,60 @@
+/**
+ * Definition for a point.
+ * function Point(x, y) {
+ *     this.x = x;
+ *     this.y = y;
+ * }
+ */
+/**
+ * @param {Point[]} points
+ * @return {number}
+ */
+var maxPoints = function(points) {
+  // line is either: y = ax + b OR x = c
+  // can be encoded as [a, b] and [null, c]
+
+  // min value is zero if
+  //   array is empty
+  //   all points are the same
+  // once we find two points not the same, min is 2
+
+  // need to go through all points
+  // keep a hash of all line equations
+
+  let lines = {};
+  for (let i = 0; i < points.length; i += 1) {
+    for (let j = 0; j < points.length; j += 1) {
+      let idx = '';
+      if (points[i].x === points[j].x) {
+        idx = i +'-null-' + points[i].x;
+      } else {
+        let a = (points[i].y - points[j].y) / (points[i].x - points[j].x);
+        let b = points[i].y - a * points[i].x;
+        idx = a + '-' + b;
+      }
+      lines[idx] || (lines[idx] = {});
+      let iPoint = points[i].x + '-' + points[i].y;
+      let jPoint = points[j].x + '-' + points[j].y;
+      lines[idx][iPoint] = 1;
+      lines[idx][jPoint] = 1;
+    }
+  }
+
+  let max = 0;
+  Object.entries(lines).map(entry => {
+    const pts = entry[1];
+    max = Math.max(max, Object.values(pts).reduce((acc, val) => { acc += val; return acc }, 0));
+  });
+
+  return max;
+};
+
+function Point(x, y) {
+  this.x = x;
+  this.y = y;
+}
+
+const points = [ new Point(1,1), new Point(2,2), new Point(3,3) ];
+
+console.log(maxPoints(points));
+
