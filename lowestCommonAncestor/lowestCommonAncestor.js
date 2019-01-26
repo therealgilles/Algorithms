@@ -4,14 +4,21 @@ function Person(name) {
 }
 
 //
-// lowestCommonAncestor
+// lowestCommonAncestor (in a family tree)
 //
-// To find the lowest common ancestor, we can go up both persons lineages using a breath-first search
-// store all nodes as we go along. At each new parent node, we check whether the other person lineage
+// This algorithm assumes we have a list of parents for each person.
+//
+// To find the lowest common ancestor, we can go up both persons lineages using a breadth-first order,
+// storing all nodes as we go along. At each new parent node, we check whether the other person lineage
 // contains that node. If so, we have found the common ancestor.
 //
 // A lineage is an flipped binary tree, assuming each person has at most two parents.
-// The algorithm below supports any number of parents though.
+// The algorithm below supports any number of parents.
+//
+// Time Complexity: O(n)
+// We visit every node at most once.
+// Space Complexity: O(2xw+2xn) = O(2x2^h+2xn) = O(2^(h+1)+2xn) = O(2^h+n)
+// where w is the largest width of the tree, h is the height of the tree, and n is the number of nodes.
 //
 
 const lowestCommonAncestor = (p1, p2) => {
