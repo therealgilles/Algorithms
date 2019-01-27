@@ -1,8 +1,3 @@
-function Person(name) {
-  this.name = name
-  this.parents = []
-}
-
 //
 // lowestCommonAncestor (in a family tree)
 //
@@ -20,6 +15,11 @@ function Person(name) {
 // Space Complexity: O(2xw+2xn) = O(2x2^h+2xn) = O(2^(h+1)+2xn) = O(2^h+n)
 // where w is the largest width of the tree, h is the height of the tree, and n is the number of nodes.
 //
+
+function Person(name) {
+  this.name = name
+  this.parents = []
+}
 
 const lowestCommonAncestor = (p1, p2) => {
   if (!p1 || !p2) return null
@@ -120,5 +120,5 @@ if (debug) {
   console.log('p3/p6 =', lowestCommonAncestor(p3, p6)) // undefined
   console.log('p12/p8 =', lowestCommonAncestor(p12, p8)) // p3
   console.log('p3/p13 =', lowestCommonAncestor(p3, p13)) // p3
-}
 
+}

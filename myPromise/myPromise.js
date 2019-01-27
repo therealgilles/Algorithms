@@ -95,21 +95,26 @@ MyPromise.all = promiseArray => {
   })
 }
 
-run().catch(error => console.error(error.stack))
+const debug = false
 
-async function run() {
-  const start = Date.now()
-  await new MyPromise(resolve => setTimeout(() => resolve(), 100))
-  console.log('Elapsed time:', Date.now() - start)
+if (debug) {
+
+  run().catch(error => console.error(error.stack))
+
+  async function run() {
+    const start = Date.now()
+    await new MyPromise(resolve => setTimeout(() => resolve(), 100))
+    console.log('Elapsed time:', Date.now() - start)
+  }
+
+  run1().catch(error => console.error(error.stack))
+
+  async function run1() {
+    const results = await MyPromise.all([
+      new MyPromise(resolve => resolve(1)),
+      new MyPromise(resolve => resolve(2)),
+    ])
+    console.log('Results:', results)
+  }
+
 }
-
-run1().catch(error => console.error(error.stack))
-
-async function run1() {
-  const results = await MyPromise.all([
-    new MyPromise(resolve => resolve(1)),
-    new MyPromise(resolve => resolve(2)),
-  ])
-  console.log('Results:', results)
-}
-
