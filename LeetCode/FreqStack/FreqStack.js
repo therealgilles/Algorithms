@@ -1,14 +1,7 @@
 
 const FreqStack = function() {
-  this.firstNodes = {}
+  this.maxFreq = {}
   this.stackList = []
-}
-
-const Node = function (val, stack) {
-  this.val = val
-  this.stack = stack
-  this.prev = null
-  if (!stack) this.last = null
 }
 
 /** 
@@ -18,29 +11,12 @@ const Node = function (val, stack) {
 FreqStack.prototype.push = function(x) {
   if (x === undefined) return
 
-  const addToStack = (stack, node) => {
-    this.stackList[stack] || (this.stackList[stack] = [])
+  this.maxFreq[x] || (this.maxFreq[x] = 0)
+  this.maxFreq[x] += 1
 
-    // add to proper stack
-    this.stackList[stack].push(node)
-
-    // update firstNodes[x].last
-    this.firstNodes[x].last = node
-  }
-
-  let stack, node
-  if (!this.firstNodes[x]) {
-    stack = 0
-    node = new Node(x, stack)
-    this.firstNodes[x] = node
-  } else {
-    const lastNode = this.firstNodes[x].last 
-    stack = lastNode.stack + 1
-    node = new Node(x, stack)
-    node.prev = lastNode
-  }
-
-  addToStack(stack, node)
+  const stack = this.maxFreq[x] - 1
+  this.stackList[stack] || (this.stackList[stack] = [])
+  this.stackList[stack].push(x)
 }
 
 /**
@@ -50,19 +26,13 @@ FreqStack.prototype.pop = function() {
   const stack = this.stackList.length - 1
   const maxFreqStack = this.stackList[stack]
 
-  // get highest freq entry
-  const node = maxFreqStack.pop()
+  const val = maxFreqStack.pop()
 
-  // update last node
-  if (node.prev) this.firstNodes[node.val].last = node.prev
-
-  // delete first node if we are on the 1st stack
-  if (stack === 0) delete this.firstNodes[node.val]
-
-  // remove stack if empty
+  this.maxFreq[val] -= 1
+  if (this.maxFreq[val] === 0) delete this.maxFreq[val]
   if (maxFreqStack.length === 0) this.stackList.splice(-1, 1)
  
-  return node.val
+  return val
 }
 
 /** 
